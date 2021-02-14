@@ -33,16 +33,20 @@ const showImages = (images) => {
 async function getImages(query) {
   try {
     toggleSpinner();
+    if (query.trim() == "") {
+      toggleSpinner();
+      alertModal("Please Input Something");
+      // return;
+    }
     let data = await fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`).then(response => response.json());
     if (data.hits.length == 0) {
-      alertModal(`There has no result for ${query}`, "No Result Found!","success");
+      alertModal(`There has no result for ${query}`, "No Result Found!", "success");
       return;
     }
     showImages(data.hits);
-    document.getElementById('resultsFound').innerHTML = `<strong class='text-primary'>${data.hits.length}</strong> results found for ${query}`
-
+    document.getElementById('resultsFound').innerHTML = `Total <strong class='text-primary'>${data.total}</strong> results found for ${query}`;
   } catch (error) {
-    alertModal(error, "NETWORK Error", "success");
+    alertModal(error, "Network Error", "danger");
   }
   finally {
     toggleSpinner();
@@ -132,14 +136,12 @@ const changeSlide = (index) => {
 }
 
 function handleSearch() {
+
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   const search = document.getElementById('search');
-  if (search.value == "") {
-    alertModal("Please Input Something");
-    return;
-  }
-  getImages(search.value);
+
+  getImages(search.value.trim());
   search.value = ""
   sliders.length = 0;
 };
@@ -148,49 +150,8 @@ function handleSearch() {
 searchBtn.addEventListener('click', handleSearch);
 
 document.getElementById('search').addEventListener('keypress', function (event) {
-  if (event.key == "Enter") {
-    handleSearch();
-  }
+  if (event.key == "Enter") handleSearch();
 });
+
 sliderBtn.addEventListener('click', createSlider);
 
-// UI Components 
-function openModal(text, name, type) {
-  let alertModalEl = document.createElement('div');
-  alertModalEl.className = "modal";
-  alertModalEl.setAttribute('id', 'alertModal');
-  alertModalEl.style.display = "block";
-
-  let alert = `<div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title"> ${name} </h4>
-            <button type="button" class="close btn btn-${type}" data-dismiss="modal" onclick='closeModal()'>&times;</button>
-          </div>
-          <div class="modal-body">
-            ${text}
-          </div>          
-          <div class="modal-footer">
-            <button type="button" class="btn btn-${type}" onclick='closeModal()' data-dismiss="modal">Close</button>
-          </div>
-          
-        </div>
-      </div>`;
-  alertModalEl.innerHTML = alert;
-  document.body.appendChild(alertModalEl);
-}
-
-function closeModal() {
-  document.getElementById('alertModal') ? document.getElementById('alertModal').remove() : "";
-}
-
-function alertModal(text, name = "Alert", type = "danger",duration = 300000) {
-  openModal(text, name , type);
-  setTimeout(() => {
-    closeModal();
-  }, duration);
-}
-
-function toggleSpinner() {
-  document.getElementById('loading').classList.toggle('d-none');
-}
