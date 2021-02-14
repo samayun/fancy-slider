@@ -44,11 +44,11 @@ function alertModal(text, name = "Alert", type = "danger", duration = 300000) {
  * I injected this component into HTML Document Dynamically
  * No need to add `<div id="loading"> </div>` in HTML Document
  */
-(function spinnerComponent() {
+function spinnerComponent() {
   let loadingElement = document.createElement("div");
   loadingElement.className = "d-none my-2";
   loadingElement.setAttribute("id", "loading");
-  loadingElement.style.display = "block";
+  // loadingElement.style.display = "block";
 
   let loadingComponent = `<div class="container text-center">
                     <div class="spinner-grow text-primary"></div>
@@ -62,8 +62,10 @@ function alertModal(text, name = "Alert", type = "danger", duration = 300000) {
               </div>`;
   loadingElement.innerHTML = loadingComponent;
   document.body.appendChild(loadingElement);
-})();
+}
 
 function toggleSpinner() {
   document.getElementById("loading").classList.toggle("d-none");
 }
+
+spinnerComponent();
