@@ -32,11 +32,6 @@ const showImages = (images) => {
 
 async function getImages(query) {
   try {
-    if (query.trim() == "") {
-      // toggleSpinner();
-      alertModal("Please Input Something");
-      return;
-    }
     toggleSpinner();
     let data = await fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`).then(response => response.json());
     if (data.hits.length == 0) {
@@ -142,8 +137,12 @@ function handleSearch() {
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   const search = document.getElementById('search');
-
-  getImages(search.value.trim());
+  if (search.value.trim() == "") {
+    alertModal("Please Input Something");
+  }
+  else{
+    getImages(search.value.trim());
+  }
   search.value = ""
   sliders.length = 0;
 };
@@ -158,7 +157,7 @@ document.getElementById('search').addEventListener('keypress', function (event) 
 sliderBtn.addEventListener('click', function () {
   const duration = document.getElementById('duration').value || 1000;
     if (duration < 0) {
-        alertModal('Negative time is not allowed ⚠',"Validation Alert","info");
+        alertModal('Negative time is not allowed',"Validation Alert","info");
     } else {
       createSlider();
     }
