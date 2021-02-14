@@ -34,7 +34,7 @@ async function getImages(query) {
   try {
     toggleSpinner();
     if (query.trim() == "") {
-      toggleSpinner();
+      // toggleSpinner();
       alertModal("Please Input Something");
       return;
     }

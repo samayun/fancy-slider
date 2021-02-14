@@ -34,38 +34,14 @@ function closeModal() {
     : "";
 }
 
-function alertModal(text, name = "Alert", type = "danger", duration = 300000) {
+function alertModal(text, name = "Alert", type = "danger", duration = 3000) {
   openModal(text, name, type);
   setTimeout(() => {
     closeModal();
   }, duration);
-}
-/**
- * I injected this component into HTML Document Dynamically
- * No need to add `<div id="loading"> </div>` in HTML Document
- */
-function spinnerComponent() {
-  let loadingElement = document.createElement("div");
-  loadingElement.className = "d-none my-2";
-  loadingElement.setAttribute("id", "loading");
-  // loadingElement.style.display = "block";
-
-  let loadingComponent = `<div class="container text-center">
-                    <div class="spinner-grow text-primary"></div>
-                    <div class="spinner-grow text-success"></div>
-                    <div class="spinner-grow text-info"></div>
-                    <div class="spinner-grow text-warning"></div>
-                    <div class="spinner-grow text-danger"></div>
-                    <div class="spinner-grow text-secondary"></div>
-                    <div class="spinner-grow text-dark"></div>
-                    <div class="spinner-grow text-light"></div>
-              </div>`;
-  loadingElement.innerHTML = loadingComponent;
-  document.body.appendChild(loadingElement);
 }
 
 function toggleSpinner() {
   document.getElementById("loading").classList.toggle("d-none");
 }
 
-spinnerComponent();
